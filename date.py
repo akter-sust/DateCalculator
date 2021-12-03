@@ -100,9 +100,9 @@ if __name__ == "__main__":
     date2 = Date(args.second)
     print(date1 - date2)
     
-    from datetime import datetime
-    date1 = datetime.strptime(args.first, "%d/%m/%Y")
-    date2 = datetime.strptime(args.second, "%d/%m/%Y")
-    diff = abs(date1 - date2)
-    print(diff.days-1)
+#     from datetime import datetime
+#     date1 = datetime.strptime(args.first, "%d/%m/%Y")
+#     date2 = datetime.strptime(args.second, "%d/%m/%Y")
+#     diff = abs(date1 - date2)
+#     print(diff.days-1)
             
