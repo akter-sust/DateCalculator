@@ -68,24 +68,29 @@ class Date:
             return "Invalid second date"
             
         number_of_leap_year = lambda x: (x//4) - (x//100) + (x//400)
-        days_a = self.year * 365 + number_of_leap_year(self.year) + \
+        # considering previous year for number of leap year, 
+        # since leap year for current year is coming through days of month
+        days_a = self.year * 365 + number_of_leap_year(self.year - 1) + \
                  sum([self.days_in_month[m] for m in range(1, self.month)]) + \
                  self.day
                  
-        days_b = date_b.year * 365 + number_of_leap_year(date_b.year) + \
+        days_b = date_b.year * 365 + number_of_leap_year(date_b.year - 1) + \
                  sum([date_b.days_in_month[m] for m in range(1, date_b.month)]) + \
                  date_b.day
                  
-        print(number_of_leap_year(self.year), "---", number_of_leap_year(date_b.year))
-        print(sum([self.days_in_month[m] for m in range(1, self.month)]), "---", sum([date_b.days_in_month[m] for m in range(1, date_b.month)]))
-        print(days_a, "---", days_b)
-        diff = days_a - days_b
-        if diff < 0:
-            return "Second date is greater than first date"
-        return diff - 1 # subtract 1 due to non inclusive of both dates 
+        diff = abs(days_a - days_b) - 1 # subtract 1 due to non inclusive of both dates 
+        return diff 
         
 if __name__ == "__main__":
-    start = Date("02/01/2021")
-    end = Date("02/01/2021")
+    date1 = "03/01/1989"
+    date2 = "03/08/1983"
+    start = Date(date1)
+    end = Date(date2)
     print(end - start)
-        
+    
+    from datetime import datetime
+    date1 = datetime.strptime(date1, "%d/%m/%Y")
+    date2 = datetime.strptime(date2, "%d/%m/%Y")
+    diff = date1 - date2
+    print(diff.days-1)
+            
