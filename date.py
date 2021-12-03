@@ -3,14 +3,15 @@
 
 '''
 import re
+import argparse
 
 class Date:
-    days_in_month = {1: 31,  2: 28,  3: 31,  4: 30,
-                     5: 31,  6: 28,  7: 31,  8: 31,
-                     9: 30, 10: 31, 11: 30, 12: 31}
     date = None
     def __init__(self, date: str):
         self.date = date.strip()
+        self.days_in_month = {1: 31,  2: 28,  3: 31,  4: 30,
+                              5: 31,  6: 30,  7: 31,  8: 31,
+                              9: 30, 10: 31, 11: 30, 12: 31}
         
     def is_leap_year(self):
         """
@@ -66,8 +67,9 @@ class Date:
             return "Invalid first date"
         if not date_b.is_valid_date():
             return "Invalid second date"
-            
+             
         number_of_leap_year = lambda x: (x//4) - (x//100) + (x//400)
+        
         # considering previous year for number of leap year, 
         # since leap year for current year is coming through days of month
         days_a = self.year * 365 + number_of_leap_year(self.year - 1) + \
@@ -82,8 +84,16 @@ class Date:
         return diff 
         
 if __name__ == "__main__":
-    date1 = "03/01/1989"
-    date2 = "03/08/1983"
+    # Instantiate the parser
+    parser = argparse.ArgumentParser(description='Date Calculator: usage example "python main.py 02/03/1989 03/08/2099"')
+    # Optional positional argument
+    parser.add_argument('first', type=str, help='The first date in DD/MM/YYYY format.')
+    parser.add_argument('second', type=str, help='The second date in DD/MM/YYYY format.')
+    args = parser.parse_args()
+    
+    date1 = args.first
+    date2 = args.second
+    
     start = Date(date1)
     end = Date(date2)
     print(end - start)
@@ -91,6 +101,6 @@ if __name__ == "__main__":
     from datetime import datetime
     date1 = datetime.strptime(date1, "%d/%m/%Y")
     date2 = datetime.strptime(date2, "%d/%m/%Y")
-    diff = date1 - date2
+    diff = abs(date1 - date2)
     print(diff.days-1)
             
