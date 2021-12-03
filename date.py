@@ -36,7 +36,8 @@ class Date:
         
     def is_valid_date(self):
         """
-            This function will return false if the date is wrong and 
+            This function will return false if the date is wrong format 
+            (correct format is DD/MM/YYYY) and 
             not in between 01/01/1901 and 31/12/2999
         """
         match = re.search(r'(\d{2}/\d{2}/\d{4})', self.date)
@@ -60,8 +61,31 @@ class Date:
             
         return True
             
+    def __sub__(self, date_b):
+        if not self.is_valid_date():
+            return "Invalid first date"
+        if not date_b.is_valid_date():
+            return "Invalid second date"
+            
+        number_of_leap_year = lambda x: (x//4) - (x//100) + (x//400)
+        days_a = self.year * 365 + number_of_leap_year(self.year) + \
+                 sum([self.days_in_month[m] for m in range(1, self.month)]) + \
+                 self.day
+                 
+        days_b = date_b.year * 365 + number_of_leap_year(date_b.year) + \
+                 sum([date_b.days_in_month[m] for m in range(1, date_b.month)]) + \
+                 date_b.day
+                 
+        print(number_of_leap_year(self.year), "---", number_of_leap_year(date_b.year))
+        print(sum([self.days_in_month[m] for m in range(1, self.month)]), "---", sum([date_b.days_in_month[m] for m in range(1, date_b.month)]))
+        print(days_a, "---", days_b)
+        diff = days_a - days_b
+        if diff < 0:
+            return "Second date is greater than first date"
+        return diff - 1 # subtract 1 due to non inclusive of both dates 
         
 if __name__ == "__main__":
-    start = Date("02/21/2099")
-    print(start.is_valid_date())
+    start = Date("02/01/2021")
+    end = Date("02/01/2021")
+    print(end - start)
         
