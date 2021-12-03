@@ -32,6 +32,22 @@ class TestDateMethods(unittest.TestCase):
         expected_diff = abs((date1 - date2).days) - 1 
         
         self.assertEqual(expected_diff, Date(first) - Date(second))
+    def test_Date_subtract2(self):
+        first = "03/08/2018"
+        second = "04/08/2018"
+        self.assertEqual(0, Date(first) - Date(second))
+    def test_Date_subtract3(self):
+        first = "02/06/1983"
+        second = "22/06/1983"
+        self.assertEqual(19, Date(first) - Date(second))
+    def test_Date_subtract4(self):
+        first = "04/07/1984"
+        second = "25/12/1984"
+        self.assertEqual(173, Date(first) - Date(second))
+    def test_Date_subtract5(self):
+        first = "03/01/1989"
+        second = "03/08/1983"
+        self.assertEqual(1979, Date(first) - Date(second))
         
         
 if __name__ == "__main__":
