@@ -90,7 +90,7 @@ class Date:
         
 if __name__ == "__main__":
     # Instantiate the parser
-    parser = argparse.ArgumentParser(description='Date Calculator: usage example "python main.py 02/03/1989 03/08/2099"')
+    parser = argparse.ArgumentParser(description='Date Calculator: usage example "python date.py 02/03/1989 03/08/2099"')
     # Two required positional argument
     parser.add_argument('first', type=str, help='The first date in DD/MM/YYYY format.')
     parser.add_argument('second', type=str, help='The second date in DD/MM/YYYY format.')
