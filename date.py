@@ -5,27 +5,34 @@
 import re
 
 class Date:
-    days_in_month = {"01": 31, "02": 28, "03": 31, "04": 30,
-                     "05": 31, "06": 28, "07": 31, "08": 31,
-                     "09": 30, "10": 31, "11": 30, "08": 31}
+    days_in_month = {1: 31,  2: 28,  3: 31,  4: 30,
+                     5: 31,  6: 28,  7: 31,  8: 31,
+                     9: 30, 10: 31, 11: 30, 12: 31}
     date = None
     def __init__(self, date: str):
         self.date = date.strip()
         
-    def is_leap_year(self, year: int):
+    def is_leap_year(self):
         """
             the year is checking for leap year according to Gregorian calendar 
             source: https://en.wikipedia.org/wiki/Leap_year
         """
-        if year % 4 != 0:
+        if self.year % 4 != 0:
             return False
-        elif year % 100 != 0:
+        elif self.year % 100 != 0:
             return True
-        elif year % 400 != 0:
+        elif self.year % 400 != 0:
             return False
         else:
             return True
-            
+        
+    def adjust_days_of_february_for_leap_year(self):
+        """
+            If it is leap year, then days of february is 29
+            otherwise 28
+        """
+        if self.is_leap_year():
+            self.days_in_month[2] = 29
         
     def is_valid_date(self):
         """
@@ -33,23 +40,28 @@ class Date:
             not in between 01/01/1901 and 31/12/2999
         """
         match = re.search(r'(\d{2}/\d{2}/\d{4})', self.date)
-        if match.group(1) != self.date:
+        if match is None:
             return False
             
         split_date = self.date.split("/")
-        day = int(split_date[0])
-        month = split_date[1]
-        year = int(split_date)
+        self.day = int(split_date[0])
+        self.month = int(split_date[1])
+        self.year = int(split_date[2])
         
-        if year < 1901 or year > 2999:
+        if self.year < 1901 or self.year > 2999:
             return False
-        if month not in days_in_month:
+        if self.month not in self.days_in_month:
             return False
         
-        if month == "02" and day <= (days_in_month[month] 
-        elif day <= days_in_month[month]
+        self.adjust_days_of_february_for_leap_year()
+        
+        if self.day > self.days_in_month[self.month]:
+            return False
+            
+        return True
+            
         
 if __name__ == "__main__":
-    start = Date("02/02/2099")
+    start = Date("02/21/2099")
     print(start.is_valid_date())
         
