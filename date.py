@@ -1,6 +1,7 @@
 '''
-
-
+    Date Calculator
+    Author: Akter
+    Date: 04/12/2021
 '''
 import re
 import argparse
@@ -62,7 +63,8 @@ class Date:
             
         return True
             
-    def __sub__(self, date_b):
+    def __sub__(self, date_b: "Date"):
+        assert isinstance(date_b, Date)
         if not self.is_valid_date():
             return "Invalid first date"
         if not date_b.is_valid_date():
@@ -81,26 +83,26 @@ class Date:
                  date_b.day
                  
         diff = abs(days_a - days_b) - 1 # subtract 1 due to non inclusive of both dates 
+        if diff < 0:
+            # for same first and second date is not defined, so i am returning 0.
+            diff = 0
         return diff 
         
 if __name__ == "__main__":
     # Instantiate the parser
     parser = argparse.ArgumentParser(description='Date Calculator: usage example "python main.py 02/03/1989 03/08/2099"')
-    # Optional positional argument
+    # Two required positional argument
     parser.add_argument('first', type=str, help='The first date in DD/MM/YYYY format.')
     parser.add_argument('second', type=str, help='The second date in DD/MM/YYYY format.')
     args = parser.parse_args()
     
-    date1 = args.first
-    date2 = args.second
-    
-    start = Date(date1)
-    end = Date(date2)
-    print(end - start)
+    date1 = Date(args.first)
+    date2 = Date(args.second)
+    print(date1 - date2)
     
     from datetime import datetime
-    date1 = datetime.strptime(date1, "%d/%m/%Y")
-    date2 = datetime.strptime(date2, "%d/%m/%Y")
+    date1 = datetime.strptime(args.first, "%d/%m/%Y")
+    date2 = datetime.strptime(args.second, "%d/%m/%Y")
     diff = abs(date1 - date2)
     print(diff.days-1)
             
