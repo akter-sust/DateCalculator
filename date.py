@@ -9,12 +9,15 @@ import argparse
 class Date:
     date = None
     def __init__(self, date: str):
+        """
+            Constructor of Date
+        """
         self.date = date.strip()
-        self.days_in_month = {1: 31,  2: 28,  3: 31,  4: 30,
-                              5: 31,  6: 30,  7: 31,  8: 31,
-                              9: 30, 10: 31, 11: 30, 12: 31}
+        # since python indexing from 0 and month started from 1, 
+        # we set 0 for 0th index of days_in_month
+        self.days_in_month = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if not self.is_valid_date():
-            raise ValueError("Wrong Date provided")
+            raise ValueError("Invalid formatted Date provided")
         
     def is_leap_year(self):
         """
@@ -55,7 +58,7 @@ class Date:
         
         if self.year < 1901 or self.year > 2999:
             return False
-        if self.month not in self.days_in_month:
+        if self.month < 1 or self.month > 12:
             return False
         
         self.adjust_days_of_february_for_leap_year()
@@ -66,22 +69,25 @@ class Date:
         return True
             
     def __sub__(self, date_b: "Date"):
+        """
+            mathmatical substruct for the date class
+        """
         assert isinstance(date_b, Date)
         if not self.is_valid_date():
-            return "Invalid first date"
+            raise ValueError("Invalid formatted first Date provided")
         if not date_b.is_valid_date():
-            return "Invalid second date"
+            raise ValueError("Invalid formatted second Date provided")
              
         number_of_leap_year = lambda x: (x//4) - (x//100) + (x//400)
         
         # considering previous year for number of leap year, 
         # since leap year for current year is coming through days of month
         days_a = self.year * 365 + number_of_leap_year(self.year - 1) + \
-                 sum([self.days_in_month[m] for m in range(1, self.month)]) + \
+                 sum(self.days_in_month[:self.month]) + \
                  self.day
                  
         days_b = date_b.year * 365 + number_of_leap_year(date_b.year - 1) + \
-                 sum([date_b.days_in_month[m] for m in range(1, date_b.month)]) + \
+                 sum(date_b.days_in_month[:date_b.month]) + \
                  date_b.day
                  
         diff = abs(days_a - days_b) - 1 # subtract 1 due to non inclusive of both dates 
@@ -102,9 +108,4 @@ if __name__ == "__main__":
     date2 = Date(args.second)
     print(date1 - date2)
     
-#     from datetime import datetime
-#     date1 = datetime.strptime(args.first, "%d/%m/%Y")
-#     date2 = datetime.strptime(args.second, "%d/%m/%Y")
-#     diff = abs(date1 - date2)
-#     print(diff.days-1)
             
