@@ -48,6 +48,15 @@ class TestDateMethods(unittest.TestCase):
         first = "03/01/1989"
         second = "03/08/1983"
         self.assertEqual(1979, Date(first) - Date(second))
+    def test_Date_subtract6(self):
+        first = "02/01/1901"
+        second = "02/04/2999"
+        from datetime import datetime
+        date1 = datetime.strptime(first, "%d/%m/%Y")
+        date2 = datetime.strptime(second, "%d/%m/%Y")
+        expected_diff = abs((date1 - date2).days) - 1 
+        
+        self.assertEqual(expected_diff, Date(first) - Date(second))
         
         
 if __name__ == "__main__":
